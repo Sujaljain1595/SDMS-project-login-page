@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Student Management System</title>
+  <link rel="stylesheet" type="text/css" href="bootstrap-4.4.1/css/bootstrap.min.css">
+  <script type="text/javascript" src="bootstrap-4.4.1/js/jugery_latest.js"></script>
+  <script type="text/javascript" src="bootstrap-4.4.1/js/bootstrap.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      height: 100vh;
+      background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    .line {
+      opacity: 0;
+      transition: opacity 2s ease, transform 2s ease;
+    }
+
+    .line1, .line2 {
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: white;
+      margin: 0;
+    }
+
+    .line1 {
+      transform: translateY(-50px);
+    }
+
+    .line2 {
+      transform: translateY(50px);
+    }
+
+    .line.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .button-container {
+      margin-top: 20px;
+      opacity: 0;
+      transition: opacity 2s ease;
+    }
+
+    .button-container.active {
+      opacity: 1;
+    }
+
+    .swipe-button {
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: white;
+      background-color: #ff6f61;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .swipe-button:hover {
+      background-color: #e65a50;
+    }
+
+    .login-container {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .login-container input {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: white;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .login-container input:hover {
+      background-color: #0056b3;
+    }
+
+    .admin-login-container {
+      display: none;
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .admin-login-container input {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: white;
+      background-color: ;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .admin-login-container input:hover {
+      background-color: #030000;
+    }
+  </style>
+</head>
+<body>
+  <!-- Animation Section -->
+  <div class="container">
+    <p class="line line1">Student Info</p>
+    <p class="line line2">Basket</p>
+    <div class="button-container">
+      <button class="swipe-button" onclick="showLogin()">Swipe to Start</button>
+    </div>
+  </div>
+
+  <!-- Login Section -->
+  <div class="login-container">
+    <h3 style="background-color:powderblue;">Student Management System</h3><br>
+    <form action="" method="POST">
+      <input type="submit" name="admin_login" value="Admin Login" onclick="showAdminLoginForm(); return false;">
+      <input type="submit" name="student_login" value="Student Login">
+      <input type="submit" name="teacher_login" value="Teacher Login">
+    </form>
+  </div>
+
+  <!-- Admin Login Form Section -->
+  <div class="admin-login-container">
+    <h3>Admin Login</h3><br>
+    <form action="" method="post">
+      Email ID: <input type="text" name="email" required><br><br>
+      Password: <input type="password" name="password" required><br><br>
+      <input type="submit" name="submit" value="Login">
+    </form><br>
+
+    <?php
+    session_start();
+
+    if (isset($_POST['submit'])) {
+      $connection = mysqli_connect("localhost", "root", "");
+      $db = mysqli_select_db($connection, "sms");
+
+      $query = "SELECT * FROM login WHERE email = '$_POST[email]'";
+      $query_run = mysqli_query($connection, $query);
+
+      while ($row = mysqli_fetch_assoc($query_run)) {
+        if ($row['email'] == $_POST['email']) {
+          if ($row['password'] == $_POST['password']) {
+            $_SESSION['name'] = $row['name'];
+            $_SESSION['email'] = $row['email'];
+            header("Location: admin_dashboard.php");
+          } else {
+            echo "<span>Wrong Password!!</span>";
+          
+    
+  </div>
+
+  <script>
+    window.onload = () => {
+      const lines = document.querySelectorAll('.line');
+      const buttonContainer = document.querySelector('.button-container');
+
+      // Trigger animation for lines
+      setTimeout(() => {
+        lines.forEach((line) => line.classList.add('active'));
+      }, 500);
+
+      // Show the button with delay
+      setTimeout(() => {
+        buttonContainer.classList.add('active');
+      }, 3000); // Button appears after 3 seconds
+    };
+
+    function showLogin() {
+      // Hide animation section
+      document.querySelector('.container').style.display = 'none';
+      // Show login section
+      document.querySelector('.login-container').style.display = 'block';
+    }
+
+    function showAdminLoginForm() {
+      // Show Admin Login Form
+      document.querySelector('.admin-login-container').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
